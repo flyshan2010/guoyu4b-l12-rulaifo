@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>學生自學網</title>
+<meta name="description" content="國小學生自學互動網站：各節重點、概念迷思、探究提問、課後評量、學習證明。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 頂部標題列（內容由 app.js 依 content.js 的 UNIT.meta 動態填入） -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-emoji" id="brandEmoji">📘</span>
+      <div class="brand-text">
+        <h1 id="brandTitle">學生自學網</h1>
+        <p id="brandSub">學生自學網</p>
+      </div>
+    </div>
+    <div class="header-tools">
+      <button id="zhuyinBtn" class="tool-btn" title="切換注音標示" aria-pressed="false">ㄅㄆㄇ 注音</button>
+      <button id="stopReadBtn" class="tool-btn" title="停止朗讀" style="display:none">⏹️ 停止朗讀</button>
+      <button id="resetBtn" class="reset-btn" title="清除我的學習紀錄">🔄 重新開始</button>
+    </div>
+  </div>
+  <!-- 導覽分頁（由 app.js 動態產生） -->
+  <nav class="tabs" id="tabs" aria-label="主要分頁"></nav>
+</header>
+
+<!-- 各分頁由 app.js 動態建立並渲染 -->
+<main id="app"></main>
+
+<footer class="site-footer">
+  <p id="siteFooter">本網站供學生自學複習使用</p>
+</footer>
+
+<script src="content.js"></script>
+<script src="zhuyin.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
