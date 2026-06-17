@@ -180,7 +180,7 @@ function renderSection(s) {
       </div>
 
       <div class="block">
-        <div class="block-head"><span class="ico">🔍</span><h3 class="accent">探究提問（探究社會有絕招）</h3><span class="sub">${inq.topic}</span></div>
+        <div class="block-head"><span class="ico">🔍</span><h3 class="accent">${inq.heading || "探究提問"}</h3><span class="sub">${inq.topic}</span></div>
         ${inqHtml}
       </div>
 

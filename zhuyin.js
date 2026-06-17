@@ -49,6 +49,11 @@
     "颱":"ㄊㄞˊ","崩":"ㄅㄥ","塌":"ㄊㄚ","隧":"ㄙㄨㄟˋ","噪":"ㄗㄠˋ","鷹":"ㄧㄥ","埕":"ㄔㄥˊ","虱":"ㄕ"
   };
 
+  // 有效對照表 = 內建常用字 ＋ 本單元自動產生的完整注音（zhuyin-data.js，覆蓋率 100%）
+  // 內容檔 UNIT.vocab 的「詞」仍最優先（多音字以課本為準）。
+  let EFF = MAP;
+  function buildEff(){ EFF = Object.assign({}, MAP, (window.ZHUYIN_MAP || {})); }
+
   function isHan(ch){ const c = ch.charCodeAt(0); return c >= 0x4E00 && c <= 0x9FFF; }
 
   // 建立一個 <ruby> 元素
@@ -85,9 +90,9 @@
         continue;
       }
       const ch = text[i];
-      if (isHan(ch) && MAP[ch]){
+      if (isHan(ch) && EFF[ch]){
         flush();
-        frag.appendChild(ruby(ch, MAP[ch]));
+        frag.appendChild(ruby(ch, EFF[ch]));
       } else {
         buffer += ch;
       }
@@ -97,14 +102,18 @@
     node.parentNode.replaceChild(frag, node);
   }
 
-  const SKIP_TAGS = new Set(["SCRIPT","STYLE","RUBY","RT","SELECT","TEXTAREA","OPTION","BUTTON"]);
+  const SKIP_TAGS = new Set(["SCRIPT","STYLE","RUBY","RT","SELECT","TEXTAREA","OPTION"]);
+  // 跳過「純控制鈕」（朗讀/分頁/工具/看答案/交卷…），但仍標示測驗『選項鈕』.opt
+  const SKIP_SEL = ".speak-btn,.tab,.tool-btn,.reset-btn,.reveal-btn,.pick-ok,.pick-no,[data-submit],[data-retry]";
 
   function walk(el, vocab, vocabKeys){
     const kids = [...el.childNodes];
     for (const n of kids){
       if (n.nodeType === 3){
         if (n.nodeValue && n.nodeValue.trim()) annotateTextNode(n, vocab, vocabKeys);
-      } else if (n.nodeType === 1 && !SKIP_TAGS.has(n.tagName) && !n.classList.contains("no-zhuyin")){
+      } else if (n.nodeType === 1 && !SKIP_TAGS.has(n.tagName)
+                 && !n.classList.contains("no-zhuyin")
+                 && !(n.matches && n.matches(SKIP_SEL))){
         walk(n, vocab, vocabKeys);
       }
     }
@@ -114,6 +123,7 @@
     MAP,
     annotate(rootEl, vocab){
       vocab = vocab || {};
+      buildEff();
       const vocabKeys = Object.keys(vocab).sort((a,b) => b.length - a.length);
       walk(rootEl, vocab, vocabKeys);
     },
